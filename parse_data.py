@@ -1,8 +1,4 @@
 import os
-import requests
-import datetime
-from dotenv import load_dotenv
-import subprocess
 import git
 from typing import TypeAlias
 
@@ -11,14 +7,16 @@ repoURL = "https://github.com/CVEProject/cvelistV5"
 repoLocalPath = os.getcwd() + "/cvelistV5"
 repo = git.Repo(repoLocalPath)
 repo_origin = repo.remotes.origin
+directory_path = "cvelistV5/cves"
 
-# Traverse the cve directory and parse each json
+# Traverse the cve directory and parse each json via preorder DFS
 def DFS(start: str) -> None:
 
+    # Utility function for DFS
     def DFSutil(path: str, visited: set) -> None:
 
         visited.add(path)
-        print(f"Visited {path}")
+        print(f"Visited {path}.")
 
         # If the file is not a directory, dont read it
         if not os.path.isdir(path):
@@ -90,5 +88,5 @@ if __name__ == "__main__":
     compareLocalRemoteCommits()
 
 
-    directory_path = "cvelistV5/cves"
+
     # DFS(directory_path)
