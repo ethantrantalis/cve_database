@@ -15,13 +15,13 @@ plainAffectedVersion = ['CVE-2022-21173']
 
 print("------------------ Retrieving CVE with no affected version. ------------------")
 
-for cve in noAffectedVersion:
+for cve in plainAffectedVersion:
     url = f"{baseURL}?cveId={cve}"
     try:
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()
-        print(f"CVE: {cve}")
+        print(f"CVE: {cve}_v2")
 
         # Write to output file to see the raw api response
         with open(f"nvd_data/{cve}.json", "a") as f:
