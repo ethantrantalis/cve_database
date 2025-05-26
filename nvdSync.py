@@ -78,4 +78,4 @@ def getRecords(callType: str, resultsPerPage: int) -> None:
 
 
 if __name__ == "__main__":
-    getRecords("CVE", 2000)
+    getRecords("CPE", 10000)
