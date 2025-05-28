@@ -3,6 +3,7 @@ import os
 import requests
 import json
 import time
+from bs4 import BeautifulSoup
 
 # Load env for api key
 # ----> ADD A .env file with API_KEY="" <----
@@ -76,6 +77,5 @@ def getRecords(callType: str, resultsPerPage: int) -> None:
             break
 
 
-
 if __name__ == "__main__":
-    getRecords("CPE", 10000)
+   getRecords("cve", 2000)
