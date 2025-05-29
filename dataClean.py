@@ -10,19 +10,42 @@ def cleanJSON(inputs: List[dict], attributes: List[str]) -> List[dict]:
             for i in inputs]
 
 
-def JSONtoCSV(inputs: List[dict], output: str, header: int) -> None:
+def JSONtoCSV(target: str, output: str, entriesField: str, callType: str, attributes: List[str]) -> None:
 
     with open(output, "a") as f:
-        writer = csv.DictWriter(f, fieldnames=inputs[0].keys())
+
+        # Prepare the csv file with header
+        writer = csv.DictWriter(f, fieldnames=attributes)
         writer.writeheader()
-        writer.writerows(inputs)
+
+        # Get the target json files
+        json_files = [js for js in os.listdir(target) if js.endswith(".json")]
 
 
-with open("cpe_data/cpe0To9999.json", "r") as f:
-    data = json.load(f)["products"]
-    temp = []
-    for d in data:
+        # For each json file, get the data, and create a list of all records
+        for js in json_files:
 
-        temp.append(d["cpe"])
+            try:
 
-JSONtoCSV(cleanJSON(temp, ["deprecated", "cpeName","cpeNameId", "lastModified", "created"]), "cpeClean.csv")
+                # Get the data based on the entriesField of that record type
+                data = json.load(open(os.path.join(target, js), "r"))[entriesField]
+
+                # Format a list of records for csv writing
+                cleaned = cleanJSON([d[callType.lower()] for d in data], attributes)
+
+                # Write each dict to the csv
+                map(lambda i: writer.writerow(i), cleaned)
+
+            except json.decoder.JSONDecodeError:
+                print("JSON decoder error")
+                continue
+
+
+
+
+
+
+
+JSONtoCSV("cpe_data", "cpe_cleaned.csv", "products", "CPE", ["deprecated", "cpeName","cpeNameId", "lastModified", "created"])
+
+
